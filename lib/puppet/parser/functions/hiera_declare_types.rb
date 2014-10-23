@@ -94,10 +94,14 @@ To use `hiera_declare_types`, the following configuration is required:
     # enumerating classes for hiera_include('classes')
     raw_third_party_types = function_hiera_array([third_party_key, []])
     raw_third_party_types.each do |third_party_type|
+      puts "An array of types was found: #{third_party_type}"
       # Allow the double-colon notation for type enumeration, but use our 'hiera_' convention
       # for the actual type configuration
-      hiera_key = 'hiera_' + third_party_type.sub('::', '_')
+      hiera_key = 'hiera_' + third_party_type.gsub('::', '_')
       hash      = function_hiera_hash([hiera_key, {}])
+      hash.each do |key, value|
+        puts "#{key}:#{value}"
+      end
 
       if hash.length > 0
         function_create_resources([third_party_type, hash])
